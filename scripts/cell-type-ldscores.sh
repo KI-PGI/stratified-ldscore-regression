@@ -1,20 +1,20 @@
 
 # author: Arvid Harder, code modified from Shuyang Yao and Lu Yi
-# dependencies: assumes use on longleaf computation cluster
+
 
 
 
 # Reference files
-plink_ref="workflow/reference_files/1000G_EUR_Phase3_plink/1000G.EUR.QC"
-hm_snp="workflow/reference_files/hm_snp.txt"
+plink_ref="workflow/reference_files/sldsc_ref/1000G_EUR_Phase3_plink/1000G.EUR.QC"
+hm_snp="workflow/reference_files/sldsc_ref/hm_snp.txt"
 
-# based on the inputted bedfile
+# based on the provided bedfile
 bedfile=$1
 celltype_name=$(basename $bedfile .bed)
 outdir="workflow/ldscores/$celltype_name"
 
 
 echo Creating ldscores for $celltype_name
-sbatch --output workflow/slurm/$celltype_name-ldscores-%A_%a.out --array=1-22 \
- scripts/compute_ldscores.sh $bedfile $outdir $plink_ref $hm_snp
+sbatch --output workflow/slurm/$celltype_name-ldscores-%A_%a.out --mem=3gb --time=0:30:00 --array=1-22 \
+    scripts/compute_ldscores_per_chr.sh $bedfile $outdir $plink_ref $hm_snp
 

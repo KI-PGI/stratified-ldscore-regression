@@ -1,2 +1,0 @@
-rule setup_data:
-    

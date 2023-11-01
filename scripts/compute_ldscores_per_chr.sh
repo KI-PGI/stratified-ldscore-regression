@@ -1,10 +1,8 @@
-#!/bin/bash
-#SBATCH --mem=3gb
-#SBATCH --time=0:30:00
 
 
-# parse arguments
-# ----------------------------------------------------------------------------
+
+#  parse arguments -------------------------------------------------------------
+
 bedfile=$1
 workdir=$2
 plink_ref=$3
@@ -15,6 +13,7 @@ echo using workdir: $workdir
 echo using plink_ref: $plink_ref
 echo using hm_snp: $hm_snp
 
+# check if run as array job -----------------------------------------------------
 
 if [ -n "$SLURM_ARRAY_TASK_ID" ]; then
     echo "Running on SLURM cluster with array index $SLURM_ARRAY_TASK_ID"
@@ -23,6 +22,9 @@ else
     echo "Running locally with chromosome $5"
     chr=$5
 fi
+
+# check if workdir exists ------------------------------------------------------§
+
 annot_file=${workdir}/baseline.$chr.annot.gz
 echo using annot_file: $annot_file
 
@@ -30,9 +32,12 @@ echo using annot_file: $annot_file
 if [ ! -d "$workdir" ]; then
     mkdir -p $workdir
 fi
+
+
 # ----------------------------------------------------------------------------
 
 # assumes that computation cluster uses module system
+# if not, load python and ldsc manually
 echo Calculating LDscores for chromosome $chr, saving results to: $workdir
 module unload python
 module load ldsc
