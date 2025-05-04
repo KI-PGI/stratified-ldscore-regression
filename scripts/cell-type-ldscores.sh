@@ -2,9 +2,11 @@
 
 # Setup basic parameters
 BASEDIR="$(dirname "$(dirname "$(realpath "$0")")")"
-BEDFILE=$1
-OUTDIR=$2
+BEDFILE=$(realpath $1)
+OUTDIR=$(realpath $2)
 echo using $BASEDIR as basedir
+echo using $BEDFILE as bedfile
+echo using $OUTDIR as outdir
 
 # error if BEDFILE missing
 if [ -z "$BEDFILE" ]; then
@@ -32,10 +34,10 @@ fi
 
 
 # echo Creating ldscores for $celltype_name
-sbatch --output $OUTDIR/$celltype_name-ldscores-%A_%a.out \
- --mem=3gb \
- --account naiss2024-5-201 \
+sbatch --output $OUTDIR/ldscores-%A_%a.out \
+ --mem=5gb \
+ --account naiss2024-5-369 \
  --partition shared \
- --time=0:30:00 \
+ --time=0:45:00 \
  --array=1-22 \
  $BASEDIR/scripts/compute_ldscores_container.sh $BEDFILE $OUTDIR $BASEDIR
