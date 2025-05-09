@@ -18,7 +18,8 @@ rm sldsc_ref.tar.gz
 
 # edit parameter files
 [env.sh](scripts/env.sh) contains the slurm parameters. edit to fit your needs.
-[load_apptainer.sh] contains the code needed to make apptainer availble on your HPC. edit to fit your needs.
+
+[load_apptainer.sh](scripts/load_apptainer.sh) contains the code needed to make apptainer availble on your HPC. edit to fit your needs.
 
 ```
 source scripts/load_apptainer.sh
