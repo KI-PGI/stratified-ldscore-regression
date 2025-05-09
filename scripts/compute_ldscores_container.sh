@@ -1,5 +1,7 @@
 #!/bin/bash
-ml PDC/23.12 apptainer/1.3.0-cpeGNU-23.12
+# load apptainer module
+basedir=$(realpath $(dirname $0))
+source $basedir/scripts/load_apptainer.sh
 if [ -n "$SLURM_ARRAY_TASK_ID" ]; then
     echo "Running on SLURM cluster with array index $SLURM_ARRAY_TASK_ID"
     chr=$SLURM_ARRAY_TASK_ID

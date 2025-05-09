@@ -3,43 +3,39 @@ clone from github
 setup reference file paths
 
 ```
-~/ki-pgi-storage/Data/downstreamGWAS/reference/sldsc_ref/
-ln -s /cfs/klemming/home/a/arvhar/ki-pgi-storage/Data/downstreamGWAS/reference/ workflow
-
-```
-
-# How to use
-Clone this repository
-Download the LD-reference files
-Download the apptainer
-
-```
-scripts/cell-type-ldscores.sh dataset2_genes.bed workflow/dcgna_t2d_genes
-```
-
-The repository provides a script that will take:
-1. path to a bedfile
-2. outputdir
-
-And will run a slurm-array job to calculate LDscores
-```bash
-BEDFILE=$(realpath /cfs/klemming/projects/supr/ki-pgi-storage/shared/arvhar/dataset2_genes.bed)
-OUTDIR=$(realpath ~/arvhar/dcgna_t2d_genes)
-BASEDIR=$(realpath /cfs/klemming/home/a/arvhar/arvhar/stratified-ldscore-regression)
-
-
+git clone https://github.com/KI-PGI/stratified-ldscore-regression.git
+cd stratified-ldscore-regression
 ```
 
 
+```
+mkdir workflow
+wget https://zenodo.org/records/8367200/files/sldsc_ref.tar.gz
+tar -xvf sldsc_ref.tar.gz
+mv sldsc_ref workflow/
+rm sldsc_ref.tar.gz
+```
 
-```{r}
-library(dplyr)
-library(stringr)
-df |> 
-    filter(str_detect(X1, "chr", negate = TRUE)) |>
-    mutate(
-     X2 = as.integer(X2),
-     X3 = as.integer(X3)
+# edit parameter files
+[env.sh](scripts/env.sh) contains the slurm parameters. edit to fit your needs.
+[load_apptainer.sh] contains the code needed to make apptainer availble on your HPC. edit to fit your needs.
 
-    )
+```
+source scripts/load_apptainer.sh
+(cd workflow && apptainer pull docker://arvhar/ldsc:latest)
+```
+# check that all files are in place
+```
+workflow/sldsc_ref/hm_snp.txt
+workflow/ldsc_latest.sif
+```
+
+
+use the test.bed file to make a test run
+```
+mkdir -p workflow/testrun
+cp test.bed workflow/testrun/
+sh scripts/calc_ld.sh workflow/testrun
+
+
 ```

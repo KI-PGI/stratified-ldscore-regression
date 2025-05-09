@@ -1,0 +1,4 @@
+MEM="5gb"
+ACC="naiss2024-5-369"
+PARTITION="shared"
+TIME="0:45:00"

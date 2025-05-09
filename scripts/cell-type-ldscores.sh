@@ -8,6 +8,7 @@ echo using $BASEDIR as basedir
 echo using $BEDFILE as bedfile
 echo using $OUTDIR as outdir
 
+
 # error if BEDFILE missing
 if [ -z "$BEDFILE" ]; then
     echo "BEDFILE not provided. Exiting."
@@ -31,13 +32,16 @@ fi
 
 ###################################################
 # Start script
+# get SLURM parameters
+source $BASEDIR/scripts/env.sh
 
 
 # echo Creating ldscores for $celltype_name
 sbatch --output $OUTDIR/ldscores-%A_%a.out \
- --mem=5gb \
- --account naiss2024-5-369 \
- --partition shared \
- --time=0:45:00 \
+ --mem=$MEM \
+ --account $ACC \
+ --partition $PARTITION \
+ --time=$TIME \
  --array=1-22 \
  $BASEDIR/scripts/compute_ldscores_container.sh $BEDFILE $OUTDIR $BASEDIR
+
